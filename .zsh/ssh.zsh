@@ -19,7 +19,7 @@ if command -v ssh-agent 1>/dev/null 2>&1; then
   [ -f $SSH_AGENT_FILE ] && source $SSH_AGENT_FILE >& /dev/null
 
   # ssh-agent プロセスが存在しないならば、これを起動しつつ、設定をファイルに出力
-  if [ $( ps -ef | grep ssh-agent | grep -v grep | wc -l ) -eq 0 ]; then
+  if [ -d $HOME/.ssh ] && [ $( ps -ef | grep ssh-agent | grep -v grep | wc -l ) -eq 0 ]; then
     ssh-agent >| $SSH_AGENT_FILE
     # ssh-agent の設定内容を標準出力してほしいなら、/dev/null へ投げなくても良い
     source $SSH_AGENT_FILE >& /dev/null
