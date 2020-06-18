@@ -21,6 +21,7 @@
 ## 動作確認済み
 
 - Ubuntu Server 20.04 LTS
+- Ubuntu Desktop 20.04 LTS
 
 ## 実行手順
 
