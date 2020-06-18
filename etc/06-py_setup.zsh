@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+source $ZSH_RC
+
 PY_VER=$(pyenv install -l | grep -v '[a-zA-Z]' | grep -e '\s3\.?*' | tail -1 | tr -d ' ')
 ZSH_RC=${HOME}/.zshrc
 

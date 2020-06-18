@@ -42,14 +42,8 @@ $ make deploy
 $ cd etc
 $ ./03-ja_setup.sh
 ...
-$ ./04-brew_setup.zsh
-...
-# シェル再起動
-$ exec $SHELL -l
-$ rm -f ~/.zcompdump; compinit
-$ ./06-pyenv_setup.zsh
-...
 
+$ rm -f ~/.zcompdump; compinit
 # 最後に再起動
 $ sudo shutdown -r now
 ```
