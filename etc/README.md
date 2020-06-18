@@ -39,7 +39,7 @@ $ make deploy
 # 一度ログアウトし，ログインしなおす
 
 # 必要に応じて以降のスクリプトを順番通りに実行
-$ cd etc
+$ cd ~/dotfiles/etc
 $ ./03-ja_setup.sh
 ...
 
