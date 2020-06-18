@@ -5,5 +5,6 @@ ZSH_RC=${HOME}/.zshrc
 
 pyenv install $PY_VER
 pyenv global $PY_VER
+source $ZSH_RC
 pip install -U pip
 exit

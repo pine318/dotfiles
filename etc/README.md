@@ -9,10 +9,10 @@
 4. [Homebrew](https://brew.sh/)のインストール
    - [rmtree](https://github.com/beeftornado/homebrew-rmtree)インストール
      - 依存関係を考慮して，不要なformulaを削除をしてくれる
-5. [zsh-completions](https://github.com/zsh-users/zsh-completions)のインストール（Homebrew使用）
-6. [pyenv](https://github.com/pyenv/pyenv)のインストール（Homebrew使用）
-7. pyenvを用いてpython3系の最新版をインストール
-8. pip関連の処理
+     - [zsh-completions](https://github.com/zsh-users/zsh-completions)のインストール
+5. [pyenv](https://github.com/pyenv/pyenv)のインストール（Homebrew使用）
+6. pyenvを用いてpython3系の最新版をインストール
+7. pip関連の処理
    - パッケージ更新
    - [pip-autoremove](https://github.com/invl/pip-autoremove)のインストール
      - 依存関係を考慮して，不要なパッケージを削除をしてくれる
@@ -41,6 +41,13 @@ $ make deploy
 # 必要に応じて以降のスクリプトを順番通りに実行
 $ cd etc
 $ ./03-ja_setup.sh
+...
+$ ./04-brew_setup.zsh
+...
+# シェル再起動
+$ exec $SHELL -l
+$ rm -f ~/.zcompdump; compinit
+$ ./06-pyenv_setup.zsh
 ...
 
 # 最後に再起動
