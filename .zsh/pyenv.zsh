@@ -13,7 +13,7 @@ if command -v pip 1>/dev/null 2>&1; then
   eval "$(pip completion --zsh)"
 
   # upgrade-all
-  alias pip-upgrade-all="pip list -o | tail -n +3 | awk '{ print $1 }' | xargs pip install -U"
+  alias pip-upgrade-all="pip list -o | tail -n +3 | awk '{ print \$1 }' | xargs pip install -U"
 fi
 
 # pipenv
