@@ -15,6 +15,7 @@ function set_uec_proxy() {
   git config --global http.proxy proxy.uec.ac.jp:8080/
   git config --global https.proxy proxy.uec.ac.jp:8080/
   git config --global url."https://".insteadOf git://
+  git config --global http.http://192.168.11.11/gitbucket/.proxy ""
 }
 
 function unset_proxy() {
@@ -32,4 +33,5 @@ function unset_proxy() {
   git config --global --unset http.proxy
   git config --global --unset https.proxy
   git config --global --unset url."https://".insteadOf
+  git config --global --unset http.http://192.168.11.11/gitbucket/.proxy
 }
