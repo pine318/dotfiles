@@ -15,6 +15,7 @@ function set_uec_proxy() {
   git config --global http.proxy proxy.uec.ac.jp:8080/
   git config --global https.proxy proxy.uec.ac.jp:8080/
   git config --global url."https://".insteadOf git://
+  git config --get http.http://192.168.11.11/gitbucket/.proxy &> /dev/null && git config --global --remove-section http.http://192.168.11.11/gitbucket/
   git config --global http.http://192.168.11.11/gitbucket/.proxy ""
 }
 
@@ -30,8 +31,9 @@ function unset_proxy() {
   rm -f ~/.gemrc
   rm -f ~/.wgetrc
   rm -f ~/.curlrc
-  git config --global --unset http.proxy
-  git config --global --unset https.proxy
-  git config --global --unset url."https://".insteadOf
-  git config --global --unset http.http://192.168.11.11/gitbucket/.proxy
+  git config --get http.proxy &> /dev/null && git config --global --remove-section http
+  git config --get https.proxy &> /dev/null && git config --global --remove-section https
+  git config --get url."https://".insteadOf &> /dev/null && git config --global --remove-section url."https://"
+  git config --get http.http://192.168.11.11/gitbucket/.proxy &> /dev/null && git config --global --remove-section http.http://192.168.11.11/gitbucket/
+  git config --global http.http://192.168.11.11/gitbucket/.proxy socks5://localhost:1080
 }
