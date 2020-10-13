@@ -10,7 +10,5 @@ fi
 
 # zsh-completions
 if command -v brew 1>/dev/null 2>&1; then
-  FPATH="$(brew --prefix)/Homebrew/completions/zsh:$FPATH"
-  FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
   FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
 fi
