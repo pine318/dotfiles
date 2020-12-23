@@ -52,10 +52,15 @@ zinit is-snippet for \
 ZSHHOME="${ZDOTDIR:-$HOME}/.zsh"
 if [ -d $ZSHHOME -a -r $ZSHHOME -a \
 	-x $ZSHHOME ]; then
- 	for i in $ZSHHOME/*; do
+ 	for i in $ZSHHOME/lazy/*; do
 		[[ ${i##*/} = *.zsh ]] &&
 		[ \( -f $i -o -h $i \) -a -r $i ] &&
         zinit ice wait lucid; zinit snippet $i
+	done
+    for i in $ZSHHOME/normal/*; do
+		[[ ${i##*/} = *.zsh ]] &&
+		[ \( -f $i -o -h $i \) -a -r $i ] &&
+        zinit snippet $i
 	done
 fi
 
