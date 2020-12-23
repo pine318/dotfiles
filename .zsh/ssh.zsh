@@ -10,20 +10,23 @@ function pfkill() {
 compdef _host pfkill
 
 # ssh-agent
-SSH_AGENT_FILE="${HOME}/.ssh/ssh_agent"
-AGENT_ADD_DIR="${HOME}/.ssh/"
+SSH_DIR="${HOME}/.ssh"
+SSH_AGENT_FILE="${SSH_DIR}/ssh_agent"
 
-if [ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ] && command -v ssh-agent 1>/dev/null 2>&1 && [ -n "$SSH_CONNECTION" ]; then
-  # 固定化された ssh-agent 設定が存在すれば、それを読み込んで
-  # 既に起動している ssh-agent プロセスを再利用
-  [ -f $SSH_AGENT_FILE ] && source $SSH_AGENT_FILE >& /dev/null
-
+# WSLでない，かつssh-agentが存在するならば
+if [ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ] && command -v ssh-agent 1>/dev/null 2>&1; then
   # ssh-agent プロセスが存在しないならば、これを起動しつつ、設定をファイルに出力
-  if [ -d $HOME/.ssh ] && [ $( ps -ef | grep ssh-agent | grep -v grep | wc -l ) -eq 0 ]; then
+  if [ -d $SSH_DIR ] && [ $( ps -ef | grep ssh-agent | grep -v grep | wc -l ) -eq 0 ]; then
     ssh-agent >| $SSH_AGENT_FILE
-    # ssh-agent の設定内容を標準出力してほしいなら、/dev/null へ投げなくても良い
-    source $SSH_AGENT_FILE >& /dev/null
-    # $AGENT_ADD_DIR 配下にある id_rsa という名前のファイルを ssh-add
-    [ -d $AGENT_ADD_DIR ] && find $AGENT_ADD_DIR -name id_rsa | xargs ssh-add >& /dev/null
+    # SSH経由のログインでないならば，設定ファイルを読み込み，SSH_DIR 配下にある id_rsa という名前のファイルを ssh-add
+    if [ ! -n "$SSH_CONNECTION" ]; then
+      source $SSH_AGENT_FILE >& /dev/null
+      find $SSH_DIR -name id_rsa | xargs ssh-add >& /dev/null
+    fi
+  fi
+
+  # プロセス存在時についても，SSH経由のログインでないならば，設定ファイルを読み込む
+  if [ ! -n "$SSH_CONNECTION" ]; then
+    [ -f $SSH_AGENT_FILE ] && source $SSH_AGENT_FILE >& /dev/null
   fi
 fi
