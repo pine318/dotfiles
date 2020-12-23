@@ -1,15 +1,14 @@
 # proxy setting
 function set_proxy () {
   PROXY=$1
-  SOCKS=$2
-  NO_PROXY=$3
+  NO_PROXY=$2
   export http_proxy=${PROXY}
   export https_proxy=${PROXY}
-  export all_proxy=${SOCKS}
+  export all_proxy=${PROXY}
   export no_proxy=${NO_PROXY}
   export HTTP_PROXY=${PROXY}
   export HTTPS_PROXY=${PROXY}
-  export ALL_PROXY=${SOCKS}
+  export ALL_PROXY=${PROXY}
   export NO_PROXY=${NO_PROXY}
   echo "proxy=${PROXY}" >| ~/.curlrc
   echo "http_proxy: ${PROXY}" >| ~/.gemrc
@@ -36,9 +35,8 @@ function unset_proxy() {
 
 function set_uec_proxy () {
   UEC_PROXY="http://proxy.uec.ac.jp:8080"
-  UEC_SOCKS="socks5://socks.cc.uec.ac.jp:1080"
-  YOSHIULAB_NO_PROXY="localhost,192.168.11.0/24"
-  set_proxy ${UEC_PROXY} ${UEC_SOCKS} ${YOSHIULAB_NO_PROXY}
+  YOSHIULAB_NO_PROXY="localhost,192.168.11.1,192.168.11.11"
+  set_proxy ${UEC_PROXY} ${YOSHIULAB_NO_PROXY}
   git config --get http.http://192.168.11.11/gitbucket/.proxy &> /dev/null && git config --global --remove-section http.http://192.168.11.11/gitbucket/
   git config --global http.http://192.168.11.11/gitbucket/.proxy ""
 }
