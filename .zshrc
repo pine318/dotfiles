@@ -48,19 +48,25 @@ zinit is-snippet for \
     PZT::modules/editor \
     PZT::modules/completion/init.zsh
 
+# pyenv
+zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
+    atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
+    as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
+zinit light pyenv/pyenv
+
 # .zsh
 ZSHHOME="${ZDOTDIR:-$HOME}/.zsh"
 if [ -d $ZSHHOME -a -r $ZSHHOME -a \
 	-x $ZSHHOME ]; then
- 	for i in $ZSHHOME/lazy/*; do
-		[[ ${i##*/} = *.zsh ]] &&
-		[ \( -f $i -o -h $i \) -a -r $i ] &&
-        zinit ice wait lucid; zinit snippet $i
-	done
     for i in $ZSHHOME/normal/*; do
 		[[ ${i##*/} = *.zsh ]] &&
 		[ \( -f $i -o -h $i \) -a -r $i ] &&
         zinit snippet $i
+	done
+ 	for i in $ZSHHOME/lazy/*; do
+		[[ ${i##*/} = *.zsh ]] &&
+		[ \( -f $i -o -h $i \) -a -r $i ] &&
+        zinit ice wait lucid; zinit snippet $i
 	done
 fi
 
