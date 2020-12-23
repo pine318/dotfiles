@@ -13,7 +13,7 @@ compdef _host pfkill
 SSH_AGENT_FILE="${HOME}/.ssh/ssh_agent"
 AGENT_ADD_DIR="${HOME}/.ssh/"
 
-if [ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ] && command -v ssh-agent 1>/dev/null 2>&1; then
+if [ ! -f /proc/sys/fs/binfmt_misc/WSLInterop ] && command -v ssh-agent 1>/dev/null 2>&1 && [ -n "$SSH_CONNECTION" ]; then
   # 固定化された ssh-agent 設定が存在すれば、それを読み込んで
   # 既に起動している ssh-agent プロセスを再利用
   [ -f $SSH_AGENT_FILE ] && source $SSH_AGENT_FILE >& /dev/null
