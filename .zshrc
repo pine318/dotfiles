@@ -48,22 +48,20 @@ zinit is-snippet for \
     PZT::modules/editor \
     PZT::modules/completion/init.zsh
 
-# pyenv
-zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
+# python
+zinit ice wait lucid atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
     atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
     as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
 zinit light pyenv/pyenv
+zinit wait lucid is-snippet for \
+    OMZP::pip \
+    OMZP::pipenv
 
 # .zsh
 ZSHHOME="${ZDOTDIR:-$HOME}/.zsh"
 if [ -d $ZSHHOME -a -r $ZSHHOME -a \
 	-x $ZSHHOME ]; then
-    for i in $ZSHHOME/normal/*; do
-		[[ ${i##*/} = *.zsh ]] &&
-		[ \( -f $i -o -h $i \) -a -r $i ] &&
-        zinit snippet $i
-	done
- 	for i in $ZSHHOME/lazy/*; do
+ 	for i in $ZSHHOME/*; do
 		[[ ${i##*/} = *.zsh ]] &&
 		[ \( -f $i -o -h $i \) -a -r $i ] &&
         zinit ice wait lucid; zinit snippet $i
@@ -73,6 +71,9 @@ fi
 # compleions
 zinit wait lucid is-snippet as"completion" for \
     OMZP::docker/_docker \
-    OMZP::docker-compose/_docker-compose
+    OMZP::docker-compose/_docker-compose \
+    OMZP::pip/_pip \
+    https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew \
+    https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew_cask
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions

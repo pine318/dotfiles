@@ -6,8 +6,3 @@ elif [ -d /home/linuxbrew ]; then
   eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
   umask 002
 fi
-
-# completion
-if command -v brew 1>/dev/null 2>&1; then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
-fi
