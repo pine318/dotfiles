@@ -2,12 +2,10 @@
 function pf() {
   ssh -D1080 -N -f $1 >& /dev/null
 }
-compdef _host pf
 function pfkill() {
   pf_pid=$(ps -ef | grep "ssh -D1080 -N -f $1" | grep -v grep | awk '{print $2}')
   kill $pf_pid
 }
-compdef _host pfkill
 
 # ssh-agent
 SSH_DIR="${HOME}/.ssh"
