@@ -57,6 +57,12 @@ zinit wait lucid is-snippet for \
     OMZP::pip \
     OMZP::pipenv
 
+# nodejs
+zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
+    atinit'export NODENV_ROOT="$PWD"' atpull"%atclone" \
+    as'command' pick'bin/nodenv' src"znodenv.zsh" nocompile'!'
+zinit light nodenv/nodenv
+
 # .zsh
 ZSHHOME="${ZDOTDIR:-$HOME}/.zsh"
 if [ -d $ZSHHOME -a -r $ZSHHOME -a \
