@@ -62,6 +62,8 @@ zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
     atinit'export NODENV_ROOT="$PWD"' atpull"%atclone" \
     as'command' pick'bin/nodenv' src"znodenv.zsh" nocompile'!'
 zinit light nodenv/nodenv
+zinit ice cloneonly atclone'mkdir -p ${NODENV_ROOT}/plugins && ln -s $PWD ${NODENV_ROOT}/plugins/node-build'
+zinit light nodenv/node-build
 
 # .zsh
 ZSHHOME="${ZDOTDIR:-$HOME}/.zsh"
