@@ -31,7 +31,8 @@ zinit light-mode for \
 
 zinit light-mode for \
     zsh-users/zsh-autosuggestions \
-    zdharma/fast-syntax-highlighting
+    zdharma/fast-syntax-highlighting \
+    jreese/zsh-titles
 
 # powerlevel10k
 zinit ice depth=1; zinit light romkatv/powerlevel10k
