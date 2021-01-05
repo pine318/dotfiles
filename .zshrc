@@ -31,8 +31,7 @@ zinit light-mode for \
 
 zinit light-mode for \
     zsh-users/zsh-autosuggestions \
-    zdharma/fast-syntax-highlighting \
-    jreese/zsh-titles
+    zdharma/fast-syntax-highlighting
 
 # powerlevel10k
 zinit ice depth=1; zinit light romkatv/powerlevel10k
@@ -41,13 +40,18 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # prezto
 zstyle ':prezto:*:*' color 'yes'
+zstyle ':prezto:module:terminal' auto-title 'yes'
+zstyle ':prezto:module:terminal:window-title' format '%m: %s'
+zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
+zstyle ':prezto:module:terminal:multiplexer-title' format '%s'
 zinit is-snippet for \
     PZT::modules/utility \
     PZT::modules/history \
     PZT::modules/directory \
     PZT::modules/command-not-found \
     PZT::modules/editor \
-    PZT::modules/completion/init.zsh
+    PZT::modules/completion/init.zsh \
+    PZT::modules/terminal
 
 # python
 zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
