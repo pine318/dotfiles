@@ -52,6 +52,7 @@ zinit is-snippet for \
     PZT::modules/editor \
     PZT::modules/completion/init.zsh \
     PZT::modules/terminal
+zinit ice svn wait as=null lucid; zinit snippet PZTM::archive
 
 # python
 zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
