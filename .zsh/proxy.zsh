@@ -2,7 +2,7 @@
 function set_proxy() {
   PROXY_HOST=$1
   PROXY_PORT=$2
-  PROXY="http::/${PROXY_HOST}:${PROXY_PORT}"
+  PROXY="http://${PROXY_HOST}:${PROXY_PORT}"
   NO_PROXY=$3
   export http_proxy=${PROXY}
   export https_proxy=${PROXY}

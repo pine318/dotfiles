@@ -29,6 +29,17 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
+# .zsh
+ZSHHOME="${ZDOTDIR:-$HOME}/.zsh"
+if [ -d $ZSHHOME -a -r $ZSHHOME -a \
+	-x $ZSHHOME ]; then
+ 	for i in $ZSHHOME/*; do
+		[[ ${i##*/} = *.zsh ]] &&
+		[ \( -f $i -o -h $i \) -a -r $i ] &&
+        zinit snippet $i
+	done
+fi
+
 zinit light-mode for \
     zsh-users/zsh-autosuggestions \
     zdharma/fast-syntax-highlighting
@@ -70,17 +81,6 @@ zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
 zinit light nodenv/nodenv
 zinit ice cloneonly atclone'mkdir -p ${NODENV_ROOT}/plugins && ln -s $PWD ${NODENV_ROOT}/plugins/node-build'
 zinit light nodenv/node-build
-
-# .zsh
-ZSHHOME="${ZDOTDIR:-$HOME}/.zsh"
-if [ -d $ZSHHOME -a -r $ZSHHOME -a \
-	-x $ZSHHOME ]; then
- 	for i in $ZSHHOME/*; do
-		[[ ${i##*/} = *.zsh ]] &&
-		[ \( -f $i -o -h $i \) -a -r $i ] &&
-        zinit ice wait lucid; zinit snippet $i
-	done
-fi
 
 # compleions
 zinit wait lucid is-snippet as"completion" for \
