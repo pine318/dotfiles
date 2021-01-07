@@ -2,7 +2,7 @@
 function set_proxy() {
   PROXY_HOST=$1
   PROXY_PORT=$2
-  PROXY="${PROXY_HOST}:${PROXY_PORT}"
+  PROXY="http::/${PROXY_HOST}:${PROXY_PORT}"
   NO_PROXY=$3
   export http_proxy=${PROXY}
   export https_proxy=${PROXY}
@@ -43,7 +43,7 @@ function unset_proxy() {
 }
 
 function set_uec_proxy() {
-  UEC_PROXY_HOST="http://proxy.uec.ac.jp"
+  UEC_PROXY_HOST="proxy.uec.ac.jp"
   UEC_PROXY_PORT="8080"
   YOSHIULAB_NO_PROXY="localhost,192.168.11.1,192.168.11.11"
   set_proxy ${UEC_PROXY_HOST} ${UEC_PROXY_PORT} ${YOSHIULAB_NO_PROXY}
