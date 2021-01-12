@@ -82,6 +82,10 @@ zinit light nodenv/nodenv
 zinit ice cloneonly atclone'mkdir -p ${NODENV_ROOT}/plugins && ln -s $PWD ${NODENV_ROOT}/plugins/node-build'
 zinit light nodenv/node-build
 
+# peco
+zinit light mollifier/anyframe
+bindkey '^r' anyframe-widget-execute-history
+
 # compleions
 zinit wait lucid is-snippet as"completion" for \
     OMZP::docker/_docker \
