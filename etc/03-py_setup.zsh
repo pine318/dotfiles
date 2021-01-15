@@ -9,4 +9,7 @@ pyenv install $PY_VER
 pyenv global $PY_VER
 source $ZSH_RC
 pip install -U pip
+pip-upgrade-all
+pip install pip-autoremove
+pip install pipenv
 exit

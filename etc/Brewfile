@@ -1,0 +1,7 @@
+tap "beeftornado/rmtree"
+tap "homebrew/bundle"
+tap "homebrew/core"
+brew "pandoc"
+brew "speedtest-cli"
+brew "tree"
+brew "zsh"
