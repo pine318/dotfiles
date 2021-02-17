@@ -84,7 +84,7 @@ zinit light nodenv/node-build
 
 # peco
 zinit light mollifier/anyframe
-bindkey '^r' anyframe-widget-execute-history
+bindkey '^r' anyframe-widget-put-history
 
 # compleions
 zinit wait lucid is-snippet as"completion" for \
