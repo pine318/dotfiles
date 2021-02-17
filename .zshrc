@@ -91,6 +91,7 @@ zinit wait lucid is-snippet as"completion" for \
     OMZP::docker/_docker \
     OMZP::docker-compose/_docker-compose \
     OMZP::pip/_pip \
-    https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew 
+    https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew \
+    https://github.com/srijanshetty/zsh-pandoc-completion/blob/master/_pandoc
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions
