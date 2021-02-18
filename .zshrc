@@ -82,6 +82,10 @@ zinit light nodenv/nodenv
 zinit ice cloneonly atclone'mkdir -p ${NODENV_ROOT}/plugins && ln -s $PWD ${NODENV_ROOT}/plugins/node-build'
 zinit light nodenv/node-build
 
+# direnv
+zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' src"zhook.zsh"
+zinit light direnv/direnv
+
 # peco
 zinit light mollifier/anyframe
 bindkey '^r' anyframe-widget-put-history
