@@ -66,7 +66,7 @@ zinit is-snippet for \
 zinit ice svn wait as=null lucid; zinit snippet PZTM::archive
 
 # python
-zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
+zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init --path > zpyenv.zsh' \
     atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
     as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
 zinit light pyenv/pyenv
