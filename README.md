@@ -8,16 +8,12 @@
    $ git clone https://github.com/pine18/dotfiles.git
    ```
 
-2. （必要に応じて）etc内のスクリプトを使って環境構築
-3. dotfiles設置
+2. `make deploy`でdotfiles配置
+3. （必要に応じて）etc内のスクリプトを使って環境構築
 
-   ```sh
-   $ make deploy
-   ```
+## dotfiles削除
 
-## 設定解除
-
-- 下記コマンドでdotfilesのシンボリックリンクを全て解除
+- 下記コマンドでdotfilesのシンボリックリンクをすべて解除
 
   ```sh
   $ make clean
@@ -25,6 +21,7 @@
 
 ## 対象dotfiles
 
-- zsh
-- tmux
-- vim
+- .p10k.zsh
+- .tmux.conf
+- .vimrc
+- .zshrc
