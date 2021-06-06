@@ -6,6 +6,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 
+### Added by matsu
+### Uncomment and fill the variable(${PROXY_HOST}, ${PROXY_PORT} and ${NO_PROXY}) when running in a proxy environment
+# source "${ZDOTDIR:-$HOME}/.zsh/proxy.zsh"
+# set_proxy ${PROXY_HOST} ${PROXY_PORT} ${NO_PROXY}
+
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
@@ -66,13 +71,12 @@ zinit is-snippet for \
 zinit ice svn wait as=null lucid; zinit snippet PZTM::archive
 
 # python
-zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init --path > zpyenv.zsh && ./libexec/pyenv init - >> zpyenv.zsh' \
+zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init --path > zpyenv.zsh && ./libexec/pyenv init - | grep -v "echo" >> zpyenv.zsh' \
     atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
     as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
 zinit light pyenv/pyenv
 zinit wait lucid is-snippet for \
-    OMZP::pip \
-    OMZP::pipenv
+    OMZP::pip
 
 # nodejs
 zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
@@ -100,4 +104,6 @@ zinit wait lucid is-snippet as"completion" for \
     https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew \
     https://github.com/srijanshetty/zsh-pandoc-completion/blob/master/_pandoc
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
-    zsh-users/zsh-completions
+    zsh-users/zsh-completions \
+    OMZP::pipenv \
+    OMZP::kubectl
