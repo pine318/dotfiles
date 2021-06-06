@@ -13,8 +13,6 @@
 
 ## 実行手順
 
-- 1., 2.以外は必要に応じて実行
-
 ```sh
 $ cd ~/dotfiles
 $ ./etc/01-system_setup.sh
