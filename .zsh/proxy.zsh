@@ -42,17 +42,9 @@ function unset_proxy() {
   git config --get https.proxy &>/dev/null && git config --global --remove-section https
 }
 
-function set_uec_proxy() {
-  UEC_PROXY_HOST="proxy.uec.ac.jp"
-  UEC_PROXY_PORT="8080"
-  YOSHIULAB_NO_PROXY="localhost,192.168.11.1,192.168.11.11"
-  set_proxy ${UEC_PROXY_HOST} ${UEC_PROXY_PORT} ${YOSHIULAB_NO_PROXY}
-  git config --get http.http://192.168.11.11/gitbucket/.proxy &>/dev/null && git config --global --remove-section http.http://192.168.11.11/gitbucket/
-  git config --global http.http://192.168.11.11/gitbucket/.proxy ""
-}
-
-function unset_uec_proxy() {
-  unset_proxy
-  git config --get http.http://192.168.11.11/gitbucket/.proxy &>/dev/null && git config --global --remove-section http.http://192.168.11.11/gitbucket/
-  git config --global http.http://192.168.11.11/gitbucket/.proxy socks5://localhost:1080
-}
+# function set_proxy_example() {
+#   PROXY_HOST="proxy.example.com"
+#   PROXY_PORT="8080"
+#   NO_PROXY="127.0.0.1,localhost,192.168.11.*"
+#   set_proxy ${PROXY_HOST} ${PROXY_PORT} ${NO_PROXY}
+# }

@@ -1,5 +1,8 @@
 # dotfiles
 
+- [masterブランチ](https://github.com/pine318/dotfiles): デフォルト
+- [miniブランチ](https://github.com/pine318/dotfiles/tree/mini): 最小限の機能のみ
+
 ## 設定方法
 
 1. ダウンロード
@@ -8,8 +11,9 @@
    $ git clone https://github.com/pine18/dotfiles.git
    ```
 
-2. `make deploy`でdotfiles配置
-3. （必要に応じて）etc内のスクリプトを使って環境構築
+2. `etc/01-system_setup.sh`で必要なパッケージをインストール
+3. `make deploy`でdotfiles配置
+4. （必要に応じて）etc内のスクリプトを使って環境構築
 
 ## dotfiles削除
 
