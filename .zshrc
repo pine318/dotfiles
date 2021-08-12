@@ -78,7 +78,7 @@ zinit is-snippet for \
 # compleions
 zinit wait lucid is-snippet as"completion" for \
     OMZP::docker/_docker \
-    OMZP::docker-compose/_docker-compose \
+    OMZP::docker-compose/_docker-compose
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions \
     OMZP::kubectl
