@@ -8,10 +8,10 @@
 1. ダウンロード
 
    ```sh
-   $ git clone https://github.com/pine18/dotfiles.git
+   $ git clone -b mini https://github.com/pine18/dotfiles.git
    ```
 
-2. `etc/01-system_setup.sh`で必要なパッケージをインストール
+2. （可能なら）`etc/01-system_setup.sh`で必要なパッケージをインストール
 3. `make deploy`でdotfiles配置
 4. （必要に応じて）etc内のスクリプトを使って環境構築
 
