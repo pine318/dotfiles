@@ -1,8 +1,0 @@
-tap "beeftornado/rmtree"
-tap "homebrew/bundle"
-tap "homebrew/core"
-brew "pandoc"
-brew "pandoc-crossref"
-brew "speedtest-cli"
-brew "tree"
-brew "youtube-dl"

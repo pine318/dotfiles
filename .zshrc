@@ -70,42 +70,17 @@ zinit is-snippet for \
     PZT::modules/editor \
     PZT::modules/completion/init.zsh \
     PZT::modules/terminal
-zinit ice svn wait as=null lucid; zinit snippet PZTM::archive
 
-# python
-zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init --path > zpyenv.zsh && ./libexec/pyenv init - | grep -v "echo" >> zpyenv.zsh' \
-    atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
-    as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
-zinit light pyenv/pyenv
-zinit wait lucid is-snippet for \
-    OMZP::pip
-
-# nodejs
-zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
-    atinit'export NODENV_ROOT="$PWD"' atpull"%atclone" \
-    as'command' pick'bin/nodenv' src"znodenv.zsh" nocompile'!'
-zinit light nodenv/nodenv
-zinit ice cloneonly atclone'mkdir -p ${NODENV_ROOT}/plugins && ln -s $PWD ${NODENV_ROOT}/plugins/node-build'
-zinit light nodenv/node-build
-
-# direnv
-zinit from"gh-r" as"program" mv"direnv* -> direnv" \
-    atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
-    pick"direnv" src="zhook.zsh" for \
-        direnv/direnv
-
-# peco
-zinit light mollifier/anyframe
-bindkey '^r' anyframe-widget-put-history
+### Uncomment below if apt is available in your enviroment
+# zinit ice svn wait as=null lucid; zinit snippet PZTM::archive
+# # peco
+# zinit light mollifier/anyframe
+# bindkey '^r' anyframe-widget-put-history
 
 # compleions
 zinit wait lucid is-snippet as"completion" for \
     OMZP::docker/_docker \
-    OMZP::docker-compose/_docker-compose \
-    OMZP::pip/_pip \
-    https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew \
-    https://github.com/srijanshetty/zsh-pandoc-completion/blob/master/_pandoc
+    OMZP::docker-compose/_docker-compose
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions \
-    OMZP::pipenv \
     OMZP::kubectl
