@@ -7,9 +7,11 @@ fi
 
 
 ### Added by matsu
-### Uncomment and fill the variable(${PROXY_HOST}, ${PROXY_PORT} and ${NO_PROXY}) when running in a proxy environment
-# source "${ZDOTDIR:-$HOME}/.zsh/proxy.zsh"
-# set_proxy ${PROXY_HOST} ${PROXY_PORT} ${NO_PROXY}
+### Export the variable (${PROXY_HOST}, ${PROXY_PORT} and ${NO_PROXY_HOSTS}) in ".zshenv" when running in a proxy environment
+if [ -v PROXY_HOST ] && [ -v PROXY_PORT ] && [ -v NO_PROXY_HOSTS ]; then
+    source "${ZDOTDIR:-$HOME}/.zsh/proxy.zsh"
+    set_proxy ${PROXY_HOST} ${PROXY_PORT} ${NO_PROXY_HOSTS}
+fi
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
