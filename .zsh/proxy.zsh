@@ -12,14 +12,9 @@ function set_proxy() {
   export HTTPS_PROXY=${PROXY}
   export ALL_PROXY=${PROXY}
   export NO_PROXY=${NO_PROXY}
-  echo "proxy=${PROXY}" >|~/.curlrc
-  echo "http_proxy: ${PROXY}" >|~/.gemrc
-  echo -e "use_proxy=on\nhttp_proxy=${PROXY}\nhttps_proxy=${PROXY}\nftp_proxy=${PROXY}" >|~/.wgetrc
   if [ -e ~/.subversion/servers ] && ! grep "^http-proxy-host = " ~/.subversion/servers >/dev/null; then
-    echo -e "http-proxy-host = ${PROXY_HOST}\nhttp-proxy-port = ${PROXY_PORT}" >>~/.subversion/servers
+    echo -e "http-proxy-host = ${PROXY_HOST}\nhttp-proxy-port = ${PROXY_PORT}\nhttp-proxy-exception = ${NO_PROXY}" >>~/.subversion/servers
   fi
-  git config --global http.proxy ${PROXY}
-  git config --global https.proxy ${PROXY}
 }
 
 function unset_proxy() {
@@ -31,20 +26,14 @@ function unset_proxy() {
   unset HTTPS_PROXY
   unset ALL_PROXY
   unset NO_PROXY
-  rm -f ~/.curlrc
-  rm -f ~/.gemrc
-  rm -f ~/.wgetrc
   if [ -e ~/.subversion/servers ]; then
     sed -i -e '/^http-proxy-host = .*/d' ~/.subversion/servers
     sed -i -e '/^http-proxy-port = \d*/d' ~/.subversion/servers
+    sed -i -e '/^http-proxy-exception = .*/d' ~/.subversion/servers
   fi
-  git config --get http.proxy &>/dev/null && git config --global --remove-section http
-  git config --get https.proxy &>/dev/null && git config --global --remove-section https
 }
 
-# function set_proxy_example() {
-#   PROXY_HOST="proxy.example.com"
-#   PROXY_PORT="8080"
-#   NO_PROXY="127.0.0.1,localhost,192.168.11.*"
-#   set_proxy ${PROXY_HOST} ${PROXY_PORT} ${NO_PROXY}
-# }
+### Export the variable(${PROXY_HOST}, ${PROXY_PORT} and ${NO_PROXY_HOSTS}) in ".zshenv" when running in a proxy environment
+# export PROXY_HOST="proxy.example.com"
+# export PROXY_PORT="8080"
+# export NO_PROXY_HOSTS="127.0.0.1,localhost,192.168.11.1"
