@@ -70,7 +70,9 @@ zinit is-snippet for \
     PZT::modules/editor \
     PZT::modules/completion/init.zsh \
     PZT::modules/terminal
-zinit ice svn wait as=null lucid; zinit snippet PZTM::archive
+if type svn > /dev/null 2>&1; then
+    zinit ice svn wait as=null lucid; zinit snippet PZTM::archive
+fi
 
 # python
 zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init --path > zpyenv.zsh && ./libexec/pyenv init - | grep -v "echo" >> zpyenv.zsh' \
@@ -95,8 +97,10 @@ zinit from"gh-r" as"program" mv"direnv* -> direnv" \
         direnv/direnv
 
 # peco
-zinit light mollifier/anyframe
-bindkey '^r' anyframe-widget-put-history
+if type peco > /dev/null 2>&1; then
+    zinit light mollifier/anyframe
+    bindkey '^r' anyframe-widget-put-history
+fi
 
 # compleions
 zinit wait lucid is-snippet as"completion" for \
