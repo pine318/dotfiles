@@ -75,7 +75,7 @@ if type svn > /dev/null 2>&1; then
 fi
 
 # python
-zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init --path > zpyenv.zsh && ./libexec/pyenv init - | grep -v "echo" >> zpyenv.zsh' \
+zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
     atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
     as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
 zinit light pyenv/pyenv
@@ -104,12 +104,13 @@ fi
 
 # compleions
 zinit wait lucid is-snippet as"completion" for \
-    OMZP::docker/_docker \
+    OMZP::docker/completions/_docker \
     OMZP::docker-compose/_docker-compose \
     OMZP::pip/_pip \
     https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew \
     https://github.com/srijanshetty/zsh-pandoc-completion/blob/master/_pandoc
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions \
-    OMZP::pipenv \
-    OMZP::kubectl
+    OMZP::kubectl \
+    darvid/zsh-poetry \
+    sudosubin/zsh-poetry
