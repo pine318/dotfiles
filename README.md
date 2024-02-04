@@ -1,8 +1,5 @@
 # dotfiles
 
-- [masterブランチ](https://github.com/pine318/dotfiles): デフォルト
-- [miniブランチ](https://github.com/pine318/dotfiles/tree/mini): 最小限の機能のみ
-
 ## 設定方法
 
 1. ダウンロード
