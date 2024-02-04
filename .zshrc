@@ -74,28 +74,6 @@ if type svn > /dev/null 2>&1; then
     zinit ice svn wait as=null lucid; zinit snippet PZTM::archive
 fi
 
-# python
-zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
-    atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
-    as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
-zinit light pyenv/pyenv
-zinit wait lucid is-snippet for \
-    OMZP::pip
-
-# nodejs
-zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
-    atinit'export NODENV_ROOT="$PWD"' atpull"%atclone" \
-    as'command' pick'bin/nodenv' src"znodenv.zsh" nocompile'!'
-zinit light nodenv/nodenv
-zinit ice cloneonly atclone'mkdir -p ${NODENV_ROOT}/plugins && ln -s $PWD ${NODENV_ROOT}/plugins/node-build'
-zinit light nodenv/node-build
-
-# direnv
-zinit from"gh-r" as"program" mv"direnv* -> direnv" \
-    atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
-    pick"direnv" src="zhook.zsh" for \
-        direnv/direnv
-
 # peco
 if type peco > /dev/null 2>&1; then
     zinit light mollifier/anyframe
@@ -105,12 +83,44 @@ fi
 # compleions
 zinit wait lucid is-snippet as"completion" for \
     OMZP::docker/completions/_docker \
-    OMZP::docker-compose/_docker-compose \
-    OMZP::pip/_pip \
-    https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew \
-    https://github.com/srijanshetty/zsh-pandoc-completion/blob/master/_pandoc
+    OMZP::docker-compose/_docker-compose
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions \
-    OMZP::kubectl \
-    darvid/zsh-poetry \
-    sudosubin/zsh-poetry
+    OMZP::kubectl
+
+if [ -z "$ZINIT_LIGHT_MODE" ];then
+    # python
+    zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
+        atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
+        as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
+    zinit light pyenv/pyenv
+    zinit wait lucid is-snippet for \
+        OMZP::pip
+    # added by pipx (https://github.com/pipxproject/pipx)
+    export PATH="/home/matsu/.local/bin:$PATH"
+    # added by matsu
+    export PIPENV_VENV_IN_PROJECT=true
+
+    # nodejs
+    zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
+        atinit'export NODENV_ROOT="$PWD"' atpull"%atclone" \
+        as'command' pick'bin/nodenv' src"znodenv.zsh" nocompile'!'
+    zinit light nodenv/nodenv
+    zinit ice cloneonly atclone'mkdir -p ${NODENV_ROOT}/plugins && ln -s $PWD ${NODENV_ROOT}/plugins/node-build'
+    zinit light nodenv/node-build
+
+    # direnv
+    zinit from"gh-r" as"program" mv"direnv* -> direnv" \
+        atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
+        pick"direnv" src="zhook.zsh" for \
+            direnv/direnv
+
+    # compleions
+    zinit wait lucid is-snippet as"completion" for \
+        OMZP::pip/_pip \
+        https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew \
+        https://github.com/srijanshetty/zsh-pandoc-completion/blob/master/_pandoc
+    zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
+        darvid/zsh-poetry \
+        sudosubin/zsh-poetry
+fi
