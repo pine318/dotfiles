@@ -5,7 +5,7 @@
 1. ダウンロード
 
    ```sh
-   $ git clone https://github.com/pine18/dotfiles.git
+   $ git clone https://github.com/pine318/dotfiles.git
    ```
 
 2. `etc/01-system_setup.sh`で必要なパッケージをインストール
