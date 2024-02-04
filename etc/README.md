@@ -9,7 +9,7 @@
 
 ## 動作確認済み
 
-- Ubuntu 20.04 LTS
+- Ubuntu 22.04 LTS
 
 ## 実行手順
 
@@ -27,7 +27,5 @@ $ ./etc/02-ja_setup.sh
 $ ./etc/03-py_setup.zsh
 ...
 $ ./etc/04-brew_setup.zsh
-...
-$ brew bundle ./etc/Brewfile
 ...
 ```

@@ -70,9 +70,6 @@ zinit is-snippet for \
     PZT::modules/editor \
     PZT::modules/completion/init.zsh \
     PZT::modules/terminal
-if type svn > /dev/null 2>&1; then
-    zinit ice svn wait as=null lucid; zinit snippet PZTM::archive
-fi
 
 # peco
 if type peco > /dev/null 2>&1; then
@@ -82,14 +79,14 @@ fi
 
 # compleions
 zinit wait lucid is-snippet as"completion" for \
-    OMZP::docker/completions/_docker \
+    https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
     OMZP::docker-compose/_docker-compose
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions \
     OMZP::kubectl
 
-if [ -z "$ZINIT_LIGHT_MODE" ];then
-    # python
+# python
+if [ -z "$ZINIT_LIGHT_MODE" ] || [ "$ZINIT_LIGHT_MODE" != "true" ];then
     zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
         atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
         as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
