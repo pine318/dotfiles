@@ -71,6 +71,11 @@ zinit is-snippet for \
     PZT::modules/completion/init.zsh \
     PZT::modules/terminal
 
+# ohmyzsh
+zinit is-snippet for \
+    OMZP::universalarchive \
+    OMZP::extract
+
 # peco
 if type peco > /dev/null 2>&1; then
     zinit light mollifier/anyframe
