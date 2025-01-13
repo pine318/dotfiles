@@ -46,6 +46,17 @@ if [ -d $ZSHHOME -a -r $ZSHHOME -a \
         zinit snippet $i
 	done
 fi
+# wsl2-ssh-agent
+if [[ "$(uname -r)" == *microsoft* ]]; then
+    if [ ! -d $HOME/.local/bin/ ]; then
+        mkdir -p $HOME/.local/bin/
+    fi
+    if [ ! -e $HOME/.local/bin/wsl2-ssh-agent ]; then
+        curl -L https://github.com/mame/wsl2-ssh-agent/releases/latest/download/wsl2-ssh-agent -o $HOME/.local/bin/wsl2-ssh-agent
+        chmod u+x $HOME/.local/bin/wsl2-ssh-agent
+    fi
+    eval $($HOME/.local/bin/wsl2-ssh-agent)
+fi
 
 zinit light-mode for \
     zsh-users/zsh-autosuggestions \
@@ -77,6 +88,8 @@ zinit is-snippet for \
     OMZP::extract
 
 # peco
+zinit ice from"gh-r" as"program" pick"*/peco"
+    zinit light "peco/peco"
 if type peco > /dev/null 2>&1; then
     zinit light mollifier/anyframe
     bindkey '^r' anyframe-widget-put-history
@@ -100,8 +113,10 @@ if [ -z "$ZINIT_LIGHT_MODE" ] || [ "$ZINIT_LIGHT_MODE" != "true" ];then
         OMZP::pip
     # added by pipx (https://github.com/pipxproject/pipx)
     export PATH="/home/matsu/.local/bin:$PATH"
-    # added by matsu
-    export PIPENV_VENV_IN_PROJECT=true
+
+    # experimental(no completions)
+    zinit ice from"gh-r" as"program" pick"*/uv"
+        zinit light "astral-sh/uv"
 
     # nodejs
     zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
