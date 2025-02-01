@@ -48,14 +48,11 @@ if [ -d $ZSHHOME -a -r $ZSHHOME -a \
 fi
 # wsl2-ssh-agent
 if [[ "$(uname -r)" == *microsoft* ]]; then
-    if [ ! -d $HOME/.local/bin/ ]; then
-        mkdir -p $HOME/.local/bin/
+    zinit ice from"gh-r"
+        zinit light mame/wsl2-ssh-agent
+    if [ -x $HOME/.zinit/plugins/mame---wsl2-ssh-agent/wsl2-ssh-agent ]; then
+        eval $($HOME/.zinit/plugins/mame---wsl2-ssh-agent/wsl2-ssh-agent)
     fi
-    if [ ! -e $HOME/.local/bin/wsl2-ssh-agent ]; then
-        curl -L https://github.com/mame/wsl2-ssh-agent/releases/latest/download/wsl2-ssh-agent -o $HOME/.local/bin/wsl2-ssh-agent
-        chmod u+x $HOME/.local/bin/wsl2-ssh-agent
-    fi
-    eval $($HOME/.local/bin/wsl2-ssh-agent)
 fi
 
 zinit light-mode for \
