@@ -90,10 +90,14 @@ zinit is-snippet for \
 # peco
 zinit ice from"gh-r" as"program" pick"*/peco"
     zinit light "peco/peco"
-if type peco > /dev/null 2>&1; then
-    zinit light mollifier/anyframe
-    bindkey '^r' anyframe-widget-put-history
-fi
+zinit light mollifier/anyframe
+bindkey '^r' anyframe-widget-put-history
+
+# mise
+zinit ice from"gh-r" as"program" pick"mise" mv"mise* -> mise" \
+    atclone"~/.zinit/plugins/jdx---mise/mise activate zsh > zmise.zsh; ~/.zinit/plugins/jdx---mise/mise ./mise completion zsh > _mise" \
+    atpull"%atclone" src"zmise.zsh"
+    zinit light "jdx/mise"
 
 # compleions
 zinit wait lucid is-snippet as"completion" for \
@@ -105,24 +109,10 @@ zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
 
 if [ -z "$ZINIT_LIGHT_MODE" ] || [ "$ZINIT_LIGHT_MODE" != "true" ];then
     # uv(python)
-    zinit ice from"gh-r" as"program" pick"*/uv" mv"uv* -> uv-dir" atclone"./uv-dir/uv generate-shell-completion zsh > _uv" atpull"%atclone"
+    zinit ice from"gh-r" as"program" pick"*/uv" mv"uv* -> uv" atclone"./uv/uv generate-shell-completion zsh > _uv" atpull"%atclone"
         zinit light "astral-sh/uv"
     export PATH="/home/matsu/.local/bin:$PATH"
     zinit light matthiasha/zsh-uv-env
-
-    # nodejs
-    zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
-        atinit'export NODENV_ROOT="$PWD"' atpull"%atclone" \
-        as'command' pick'bin/nodenv' src"znodenv.zsh" nocompile'!'
-        zinit light nodenv/nodenv
-    zinit ice cloneonly atclone'mkdir -p ${NODENV_ROOT}/plugins && ln -s $PWD ${NODENV_ROOT}/plugins/node-build'
-        zinit light nodenv/node-build
-
-    # direnv
-    zinit from"gh-r" as"program" mv"direnv* -> direnv" \
-        atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' \
-        pick"direnv" src="zhook.zsh" for \
-            direnv/direnv
 
     # compleions
     zinit wait lucid is-snippet as"completion" for \
