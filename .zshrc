@@ -103,28 +103,20 @@ zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions \
     OMZP::kubectl
 
-# python
 if [ -z "$ZINIT_LIGHT_MODE" ] || [ "$ZINIT_LIGHT_MODE" != "true" ];then
-    zinit ice atclone'PYENV_ROOT="$PWD" ./libexec/pyenv init - > zpyenv.zsh' \
-        atinit'export PYENV_ROOT="$PWD"' atpull"%atclone" \
-        as'command' pick'bin/pyenv' src"zpyenv.zsh" nocompile'!'
-    zinit light pyenv/pyenv
-    zinit wait lucid is-snippet for \
-        OMZP::pip
-    # added by pipx (https://github.com/pipxproject/pipx)
-    export PATH="/home/matsu/.local/bin:$PATH"
-
-    # experimental(no completions)
-    zinit ice from"gh-r" as"program" pick"*/uv"
+    # uv(python)
+    zinit ice from"gh-r" as"program" pick"*/uv" mv"uv* -> uv-dir" atclone"./uv-dir/uv generate-shell-completion zsh > _uv" atpull"%atclone"
         zinit light "astral-sh/uv"
+    export PATH="/home/matsu/.local/bin:$PATH"
+    zinit light matthiasha/zsh-uv-env
 
     # nodejs
     zinit ice atclone'NODENV_ROOT="$PWD" ./libexec/nodenv init - > znodenv.zsh' \
         atinit'export NODENV_ROOT="$PWD"' atpull"%atclone" \
         as'command' pick'bin/nodenv' src"znodenv.zsh" nocompile'!'
-    zinit light nodenv/nodenv
+        zinit light nodenv/nodenv
     zinit ice cloneonly atclone'mkdir -p ${NODENV_ROOT}/plugins && ln -s $PWD ${NODENV_ROOT}/plugins/node-build'
-    zinit light nodenv/node-build
+        zinit light nodenv/node-build
 
     # direnv
     zinit from"gh-r" as"program" mv"direnv* -> direnv" \
@@ -134,10 +126,6 @@ if [ -z "$ZINIT_LIGHT_MODE" ] || [ "$ZINIT_LIGHT_MODE" != "true" ];then
 
     # compleions
     zinit wait lucid is-snippet as"completion" for \
-        OMZP::pip/_pip \
         https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew \
         https://github.com/srijanshetty/zsh-pandoc-completion/blob/master/_pandoc
-    zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
-        darvid/zsh-poetry \
-        sudosubin/zsh-poetry
 fi
