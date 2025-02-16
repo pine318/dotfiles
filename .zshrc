@@ -96,23 +96,17 @@ zinit ice from"gh-r" as"program" pick"mise" mv"mise* -> mise" \
     atpull"%atclone" src"zmise.zsh"
     zinit light "jdx/mise"
 
+# uv(python)
+zinit ice from"gh-r" as"program" pick"*/uv" mv"uv* -> uv" atclone"./uv/uv generate-shell-completion zsh > _uv" atpull"%atclone"
+    zinit light "astral-sh/uv"
+export PATH="/home/matsu/.local/bin:$PATH"
+zinit light matthiasha/zsh-uv-env
+
 # compleions
 zinit wait lucid is-snippet as"completion" for \
     https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
-    OMZP::docker-compose/_docker-compose
+    OMZP::docker-compose/_docker-compose \
+    https://github.com/srijanshetty/zsh-pandoc-completion/blob/master/_pandoc
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions \
     OMZP::kubectl
-
-if [ -z "$ZINIT_LIGHT_MODE" ] || [ "$ZINIT_LIGHT_MODE" != "true" ];then
-    # uv(python)
-    zinit ice from"gh-r" as"program" pick"*/uv" mv"uv* -> uv" atclone"./uv/uv generate-shell-completion zsh > _uv" atpull"%atclone"
-        zinit light "astral-sh/uv"
-    export PATH="/home/matsu/.local/bin:$PATH"
-    zinit light matthiasha/zsh-uv-env
-
-    # compleions
-    zinit wait lucid is-snippet as"completion" for \
-        https://github.com/Homebrew/brew/blob/master/completions/zsh/_brew \
-        https://github.com/srijanshetty/zsh-pandoc-completion/blob/master/_pandoc
-fi
