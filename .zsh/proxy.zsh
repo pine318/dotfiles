@@ -1,9 +1,9 @@
-# proxy setting
 function set_proxy() {
-  PROXY_HOST=$1
-  PROXY_PORT=$2
-  PROXY="http://${PROXY_HOST}:${PROXY_PORT}"
-  NO_PROXY=$3
+  local PROXY_HOST=$1
+  local PROXY_PORT=$2
+  local NO_PROXY=$3
+  local PROXY="http://${PROXY_HOST}:${PROXY_PORT}"
+
   export http_proxy=${PROXY}
   export https_proxy=${PROXY}
   export all_proxy=${PROXY}
@@ -12,24 +12,23 @@ function set_proxy() {
   export HTTPS_PROXY=${PROXY}
   export ALL_PROXY=${PROXY}
   export NO_PROXY=${NO_PROXY}
-  if [ -e ~/.subversion/servers ] && ! grep "^http-proxy-host = " ~/.subversion/servers >/dev/null; then
-    echo -e "http-proxy-host = ${PROXY_HOST}\nhttp-proxy-port = ${PROXY_PORT}\nhttp-proxy-exception = ${NO_PROXY}" >>~/.subversion/servers
+
+  local SVN_CONFIG=~/.subversion/servers
+  if [ -e "$SVN_CONFIG" ] && ! grep -q "^http-proxy-host = " "$SVN_CONFIG"; then
+    {
+      echo "http-proxy-host = ${PROXY_HOST}"
+      echo "http-proxy-port = ${PROXY_PORT}"
+      echo "http-proxy-exception = ${NO_PROXY}"
+    } >> "$SVN_CONFIG"
   fi
 }
 
 function unset_proxy() {
-  unset http_proxy
-  unset https_proxy
-  unset all_proxy
-  unset no_proxy
-  unset HTTP_PROXY
-  unset HTTPS_PROXY
-  unset ALL_PROXY
-  unset NO_PROXY
-  if [ -e ~/.subversion/servers ]; then
-    sed -i -e '/^http-proxy-host = .*/d' ~/.subversion/servers
-    sed -i -e '/^http-proxy-port = \d*/d' ~/.subversion/servers
-    sed -i -e '/^http-proxy-exception = .*/d' ~/.subversion/servers
+  unset http_proxy https_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY NO_PROXY
+  
+  local SVN_CONFIG=~/.subversion/servers
+  if [ -e "$SVN_CONFIG" ]; then
+    sed -i -e '/^http-proxy-host = .*/d' -e '/^http-proxy-port = [0-9]*/d' -e '/^http-proxy-exception = .*/d' "$SVN_CONFIG"
   fi
 }
 

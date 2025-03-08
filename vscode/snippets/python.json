@@ -1,0 +1,64 @@
+{
+    "argparse": {
+        "body": [
+            "parser = argparse.ArgumentParser()",
+            "parser.add_argument('-a', '--add', dest='a_variable', type=str, help='help message', required=True)",
+            "options = parser.parse_args(args=args)"
+        ],
+        "description": "create argparse process",
+        "prefix": "argparse"
+    },
+    "conf_map": {
+        "body": [
+            "from concurrent.futures import ProcessPoolExecutor",
+            "import itertools",
+            "import os",
+            "with ProcessPoolExecutor(max_workers=os.cpu_count()) as executor:",
+            "\tresults = executor.map(sub_process, args1, itertools.repeat(arg2))",
+        ],
+        "description": "create concurrent.futures map",
+        "prefix": "conf_map"
+    },
+    "conf_submit": {
+        "body": [
+            "from concurrent.futures import ProcessPoolExecutor",
+            "import os",
+            "with ProcessPoolExecutor(max_workers=os.cpu_count()) as executor:",
+            "\tfutures = [executor.submit(sub_process, i) for i in i_list]",
+            "results = [future.result() for future in futures]"
+        ],
+        "description": "create concurrent.futures submit and result",
+        "prefix": "conf_submit"
+    },
+    "init": {
+        "body": [
+            "#!/usr/bin/env python",
+            "# coding: utf-8",
+            "",
+            "",
+            "def main(args=None):",
+            "\tpass",
+            "",
+            "",
+            "if __name__ == '__main__':",
+            "\tmain()",
+            ""
+        ],
+        "description": "create main function",
+        "prefix": "init"
+    },
+    "Parallel": {
+        "body": [
+            "result = Parallel(n_jobs=-1)([delayed(process)(n) for n in range(1000)])"
+        ],
+        "description": "create parallel process",
+        "prefix": "parallel"
+    },
+    "time_measure": {
+        "body": [
+            "with time_measure('message'):"
+        ],
+        "description": "create time_measure",
+        "prefix": "time_measure"
+    }
+}

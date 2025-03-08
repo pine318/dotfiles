@@ -1,0 +1,236 @@
+{
+    "[latex]": {
+        "editor.formatOnPaste": false,
+        "editor.suggestSelection": "recentlyUsedByPrefix"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true
+    },
+    "[shellscript]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.markdownlint": "explicit"
+    },
+    "editor.fontFamily": "'Myrica M', Consolas, 'Courier New', monospace",
+    "editor.formatOnSave": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.suggestSelection": "first",
+    "editor.wordSeparators": "/\\\\()\\\"':,.;<>~!@#$%^&*|+=[]{}`?-、。「」【】『』（）！？　てにをはがのともへでや",
+    "editor.wordWrap": "on",
+    "explorer.confirmDragAndDrop": false,
+    "files.associations": {
+        ".textlintrc": "jsonc"
+    },
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "git.ignoreWindowsGit27Warning": true,
+    "githubIssues.queries": [
+        {
+            "label": "My Issues",
+            "query": "default"
+        },
+        {
+            "label": "Created Issues",
+            "query": "author:${user} state:open repo:${owner}/${repository} sort:created-desc"
+        }
+    ],
+    "hediet.vscode-drawio.offline": false,
+    "indentRainbow.colors": [
+        "rgba(255,255,64,0.15)",
+        "rgba(127,255,127,0.15)",
+        "rgba(255,127,255,0.15)",
+        "rgba(79,236,236,0.15)"
+    ],
+    "interactiveWindow.executeWithShiftEnter": true,
+    "jupyter.askForKernelRestart": false,
+    "latex-workshop.docker.enabled": true,
+    "latex-workshop.docker.image.latex": "pine318/texlive-ja",
+    "latex-workshop.formatting.latex": "latexindent",
+    "latex-workshop.intellisense.package.enabled": true,
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.clean.fileTypes": [
+        "%DOCFILE%.aux",
+        "%DOCFILE%.blg",
+        "%DOCFILE%.idx",
+        "%DOCFILE%.ind",
+        "%DOCFILE%.lof",
+        "%DOCFILE%.lot",
+        "%DOCFILE%.out",
+        "%DOCFILE%.acn",
+        "%DOCFILE%.acr",
+        "%DOCFILE%.alg",
+        "%DOCFILE%.glg",
+        "%DOCFILE%.glo",
+        "%DOCFILE%.gls",
+        "%DOCFILE%.fls",
+        "%DOCFILE%.log",
+        "%DOCFILE%.fdb_latexmk",
+        "%DOCFILE%.snm",
+        "%DOCFILE%.synctex(busy)",
+        "%DOCFILE%.synctex.gz(busy)",
+        "%DOCFILE%.nav",
+        "%DOCFILE%.vrb",
+        "%DOCFILE%.dvi",
+    ],
+    "latex-workshop.latex.clean.method": "glob",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "Default",
+            "tools": [
+                "Latexmk (Default)"
+            ]
+        },
+        // XeLaTeX で書かれた文書のビルドレシピ
+        {
+            "name": "XeLaTeX",
+            "tools": [
+                "Latexmk (XeLaTeX)"
+            ]
+        },
+        // LaTeX(upLaTeX) で書かれた文書のビルドレシピ
+        {
+            "name": "upLaTeX",
+            "tools": [
+                "Latexmk (upLaTeX)"
+            ]
+        },
+        // LaTeX(pLaTeX) で書かれた文書のビルドレシピ
+        {
+            "name": "pLaTeX",
+            "tools": [
+                "Latexmk (pLaTeX)"
+            ]
+        },
+        // LuaLaTeX で書かれた文書のビルドレシピ
+        {
+            "name": "LuaLaTeX",
+            "tools": [
+                "Latexmk (LuaLaTeX)"
+            ]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "args": [
+                "%DOC%"
+            ],
+            "command": "latexmk",
+            "name": "Latexmk (Default)"
+        },
+        // latexmk を利用した xelatex によるビルドコマンド
+        {
+            "args": [
+                "-f",
+                "-gg",
+                "-pv",
+                "-xelatex",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "command": "latexmk",
+            "name": "Latexmk (XeLaTeX)"
+        },
+        // latexmk を利用した uplatex によるビルドコマンド
+        {
+            "args": [
+                "-f",
+                "-gg",
+                "-pv",
+                "-latex='uplatex'",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "command": "latexmk",
+            "name": "Latexmk (upLaTeX)"
+        },
+        // latexmk を利用した platex によるビルドコマンド
+        {
+            "args": [
+                "-f",
+                "-gg",
+                "-pv",
+                "-latexoption='-kanji=utf8 -no-guess-input-env'",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "command": "latexmk",
+            "name": "Latexmk (pLaTeX)"
+        },
+        // latexmk を利用した lualatex によるビルドコマンド
+        {
+            "args": [
+                "-f",
+                "-gg",
+                "-pv",
+                "-lualatex",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "command": "latexmk",
+            "name": "Latexmk (LuaLaTeX)"
+        }
+    ],
+    "latex-workshop.synctex.afterBuild.enabled": true,
+    // "latex-workshop.latex.magic.args": [
+    //     "-f",
+    //     "-gg",
+    //     "-pv",
+    //     "-synctex=1",
+    //     "-interaction=nonstopmode",
+    //     "-file-line-error",
+    //     "%DOC%"
+    // ],
+    "latex-workshop.view.pdf.viewer": "tab",
+    "markdownlint.config": {
+        "MD014": false
+    },
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    "python.terminal.activateEnvironment": false,
+    "redhat.telemetry.enabled": false,
+    "remote.SSH.defaultExtensions": [
+        "ms-ceintl.vscode-language-pack-ja",
+        "mechatroner.rainbow-csv",
+        "oderwat.indent-rainbow",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "codezombiech.gitignore",
+        "davidanson.vscode-markdownlint",
+        "yzhang.markdown-all-in-one",
+    ],
+    "security.workspace.trust.enabled": false,
+    "settingsSync.ignoredSettings": [
+        "-window.zoomLevel"
+    ],
+    "terminal.integrated.scrollback": 100000,
+    "update.showReleaseNotes": false,
+    "vsicons.dontShowNewVersionMessage": true,
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "window.zoomLevel": 1,
+    "workbench.editor.empty.hint": "hidden",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.startupEditor": "newUntitledFile"
+}
