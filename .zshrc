@@ -84,22 +84,26 @@ zinit is-snippet for \
     OMZP::universalarchive \
     OMZP::extract
 
-# peco
-zinit ice from"gh-r" as"program" pick"*/peco"
-    zinit light "peco/peco"
-zinit light mollifier/anyframe
-bindkey '^r' anyframe-widget-put-history
+# fzf
+zinit ice from"gh-r" as"program" pick"fzf"
+zinit load junegunn/fzf
+zinit ice multisrc"shell/{completion,key-bindings}.zsh" id-as"junegunn/fzf_completions" pick"/dev/null"
+zinit load junegunn/fzf
 
 # mise
-zinit ice from"gh-r" as"program" pick"mise" mv"mise* -> mise" \
-    atclone"~/.zinit/plugins/jdx---mise/mise activate zsh > zmise.zsh; ~/.zinit/plugins/jdx---mise/mise ./mise completion zsh > _mise" \
+zinit ice from"gh-r" as"program"
+zinit light jdx/usage
+zinit ice from"gh-r" as"program" mv"mise* -> mise" pick"mise" \
+    atclone"$HOME/.zinit/plugins/jdx---mise/mise activate zsh > zmise.zsh; $HOME/.zinit/plugins/jdx---mise/mise completion zsh > _mise" \
     atpull"%atclone" src"zmise.zsh"
-    zinit light "jdx/mise"
+zinit light "jdx/mise"
 
 # uv(python)
-zinit ice from"gh-r" as"program" pick"*/uv" mv"uv* -> uv" atclone"./uv/uv generate-shell-completion zsh > _uv" atpull"%atclone"
-    zinit light "astral-sh/uv"
-export PATH="/home/matsu/.local/bin:$PATH"
+zinit ice from"gh-r" as"program" \
+    pick"**/uv" \
+    atclone"**/uv generate-shell-completion zsh > _uv" \
+    atpull"%atclone"
+zinit light astral-sh/uv
 zinit light matthiasha/zsh-uv-env
 
 # compleions
