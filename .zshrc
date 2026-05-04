@@ -93,10 +93,14 @@ zinit load junegunn/fzf
 # mise
 zinit ice from"gh-r" as"program"
 zinit light jdx/usage
-zinit ice from"gh-r" as"program" mv"mise* -> mise" pick"mise" \
-    atclone"$HOME/.zinit/plugins/jdx---mise/mise activate zsh > zmise.zsh; $HOME/.zinit/plugins/jdx---mise/mise completion zsh > _mise" \
-    atpull"%atclone" src"zmise.zsh"
-zinit light "jdx/mise"
+zinit ice from"gh-r" as"program" \
+    mv"mise* -> mise" \
+    pick"mise" \
+    blockf \
+    atclone"chmod +x mise; ./mise activate zsh > zmise.zsh; ./mise completion zsh > _mise" \
+    atpull"%atclone" \
+    src"zmise.zsh"
+zinit light jdx/mise
 
 # uv(python)
 zinit ice from"gh-r" as"program" \
