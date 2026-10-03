@@ -1,17 +1,17 @@
 function set_proxy() {
   local PROXY_HOST=$1
   local PROXY_PORT=$2
-  local NO_PROXY=$3
+  local NO_PROXY_HOSTS=$3
   local PROXY="http://${PROXY_HOST}:${PROXY_PORT}"
 
   export http_proxy=${PROXY}
   export https_proxy=${PROXY}
   export all_proxy=${PROXY}
-  export no_proxy=${NO_PROXY}
+  export no_proxy=${NO_PROXY_HOSTS}
   export HTTP_PROXY=${PROXY}
   export HTTPS_PROXY=${PROXY}
   export ALL_PROXY=${PROXY}
-  export NO_PROXY=${NO_PROXY}
+  export NO_PROXY=${NO_PROXY_HOSTS}
 
   local SVN_CONFIG=~/.subversion/servers
   if [ -e "$SVN_CONFIG" ] && ! grep -q "^http-proxy-host = " "$SVN_CONFIG"; then
@@ -25,7 +25,7 @@ function set_proxy() {
 
 function unset_proxy() {
   unset http_proxy https_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY NO_PROXY
-  
+
   local SVN_CONFIG=~/.subversion/servers
   if [ -e "$SVN_CONFIG" ]; then
     sed -i -e '/^http-proxy-host = .*/d' -e '/^http-proxy-port = [0-9]*/d' -e '/^http-proxy-exception = .*/d' "$SVN_CONFIG"

@@ -94,8 +94,9 @@ zinit load junegunn/fzf
 zinit ice from"gh-r" as"program"
 zinit light jdx/usage
 zinit ice from"gh-r" as"program" \
-    mv"mise* -> mise" \
+    mv"mise-v* -> mise" \
     pick"mise" \
+    extract"" \
     blockf \
     atclone"chmod +x mise; ./mise activate zsh > zmise.zsh; ./mise completion zsh > _mise" \
     atpull"%atclone" \
@@ -118,3 +119,10 @@ zinit wait lucid is-snippet as"completion" for \
 zinit wait lucid atload"zicompinit; zicdreplay" blockf for \
     zsh-users/zsh-completions \
     OMZP::kubectl
+
+# completions(aws)
+autoload -Uz bashcompinit
+bashcompinit
+if command -v aws_completer >/dev/null 2>&1; then
+  complete -C "$(command -v aws_completer)" aws
+fi
