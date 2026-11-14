@@ -1,3 +1,5 @@
+3w36zj6.textlint
+anthropic.claude-code
 bierner.markdown-checkbox
 bierner.markdown-emoji
 bierner.markdown-footnotes
@@ -8,15 +10,17 @@ christian-kohler.path-intellisense
 codezombiech.gitignore
 csholmq.excel-to-markdown-table
 davidanson.vscode-markdownlint
+docker.docker
 donjayamanne.githistory
-eamodio.gitlens
 github.vscode-pull-request-github
 grapecity.gc-excelviewer
 hediet.vscode-drawio
 ibm.output-colorizer
 james-yu.latex-workshop
+jebbs.plantuml
 jock.svg
 mechatroner.rainbow-csv
+ms-azuretools.vscode-containers
 ms-azuretools.vscode-docker
 ms-ceintl.vscode-language-pack-ja
 ms-kubernetes-tools.vscode-kubernetes-tools
@@ -24,6 +28,7 @@ ms-python.debugpy
 ms-python.mypy-type-checker
 ms-python.python
 ms-python.vscode-pylance
+ms-python.vscode-python-envs
 ms-toolsai.jupyter
 ms-toolsai.jupyter-keymap
 ms-toolsai.jupyter-renderers
@@ -39,14 +44,10 @@ ms-vscode.remote-server
 njpwerner.autodocstring
 oderwat.indent-rainbow
 redhat.vscode-yaml
-saoudrizwan.claude-dev
 sgryjp.japanese-word-handler
 shd101wyy.markdown-preview-enhanced
-taichi.vscode-textlint
 tamasfe.even-better-toml
 tomoki1207.vscode-input-sequence
-visualstudioexptteam.intellicode-api-usage-examples
-visualstudioexptteam.vscodeintellicode
 vscode-icons-team.vscode-icons
 yzane.markdown-pdf
 yzhang.markdown-all-in-one

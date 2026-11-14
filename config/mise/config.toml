@@ -1,0 +1,12 @@
+[tools]
+claude = "latest"
+fzf = "latest"
+gh = "latest"
+"github:mame/wsl2-ssh-agent" = "latest"
+markdownlint-cli2 = "latest"
+node = "22"
+starship = "latest"
+usage = "latest"
+uv = "latest"
+
+[env]

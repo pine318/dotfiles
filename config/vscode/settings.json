@@ -208,19 +208,10 @@
     },
     "python.terminal.activateEnvironment": false,
     "redhat.telemetry.enabled": false,
-    "remote.SSH.defaultExtensions": [
-        "ms-ceintl.vscode-language-pack-ja",
-        "mechatroner.rainbow-csv",
-        "oderwat.indent-rainbow",
-        "donjayamanne.githistory",
-        "eamodio.gitlens",
-        "codezombiech.gitignore",
-        "davidanson.vscode-markdownlint",
-        "yzhang.markdown-all-in-one",
-    ],
     "security.workspace.trust.enabled": false,
     "settingsSync.ignoredSettings": [
-        "-window.zoomLevel"
+        "-window.zoomLevel",
+        "remote.SSH.remotePlatform"
     ],
     "terminal.integrated.scrollback": 100000,
     "update.showReleaseNotes": false,
@@ -232,5 +223,7 @@
         "*.ipynb": "jupyter-notebook"
     },
     "workbench.iconTheme": "vscode-icons",
-    "workbench.startupEditor": "newUntitledFile"
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.colorTheme": "Dark Modern",
+    "claudeCode.preferredLocation": "panel"
 }

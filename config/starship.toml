@@ -1,0 +1,81 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# 旧 p10k（pure スタイル・2 行）に近い見た目。starship の pure-preset をベースにしている
+#   1 行目: [user@host] ディレクトリ ブランチ 状態 [proxy:名前] 実行時間 ........ 時刻
+#   2 行目: (venv) ❯
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+${env_var.PROXY_LABEL}\
+$cmd_duration\
+$fill\
+$time\
+$line_break\
+$python\
+$character"""
+
+[fill]
+symbol = " "
+
+[username]
+format = "[$user]($style)@"
+style_user = "bright-black"
+
+[hostname]
+format = "[$hostname]($style) "
+style = "bright-black"
+
+[directory]
+style = "blue"
+truncation_length = 100
+truncate_to_repo = false
+
+[character]
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](purple)"
+
+[git_branch]
+format = "[$branch]($style)"
+style = "bright-black"
+
+[git_status]
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
+stashed = "≡"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[cmd_duration]
+min_time = 5_000
+format = "[$duration]($style) "
+style = "yellow"
+
+[time]
+disabled = false
+time_format = "%H:%M:%S"
+format = "[$time]($style)"
+style = "bright-black"
+
+[python]
+format = "[$virtualenv]($style) "
+style = "bright-black"
+detect_extensions = []
+detect_files = []
+
+# 既定以外のプロキシを使っているときだけ表示する（PROXY_LABEL は ~/.config/zsh/proxy.zsh が設定する）
+[env_var.PROXY_LABEL]
+format = "[proxy:$env_value]($style) "
+style = "yellow"

@@ -1,7 +1,0 @@
-{
-    "new page": {
-        "prefix": "new page",
-        "body": "<div style=\"page-break-before:always\"></div>",
-        "description": "insert new page"
-    }
-}

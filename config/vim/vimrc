@@ -1,10 +1,14 @@
+set encoding=utf-8
+scriptencoding utf-8
+
 " 基本設定
-" OSのクリップボードと連動
-set clipboard+=unnamed
+" 文字コード（保存は UTF-8。読み込み時は Windows 由来の Shift_JIS なども自動判別）
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf-8,cp932,euc-jp
+" ファイルタイプ別のプラグイン・インデントを有効化
+filetype plugin indent on
 " 字下げ・行頭・行末を削除可能に
 set backspace=indent,eol,start
-" 文字コードをUFT-8に設定
-set fenc=utf-8
 " バックアップファイルを作らない
 set nobackup
 " スワップファイルを作らない
@@ -23,8 +27,29 @@ nnoremap <C-e> $
 inoremap <C-e> <C-o>$
 " Ctrl-tでターミナル起動
 nnoremap <C-t> :bo terminal<CR>
-" ターミナルモード時，Ctrl-qでターミナル終了
+" ターミナルモード時，Ctrl-tでターミナル終了
 tnoremap <C-t> <C-w><C-c><C-w><C-q>
+
+
+" クリップボード
+if has('clipboard')
+  " OSのクリップボードと連動
+  set clipboard+=unnamed
+elseif exists('*echoraw') && executable('base64')
+  " クリップボード非対応の vim（WSL の標準 vim など）では、ヤンクした内容を
+  " OSC52 で端末（Windows Terminal など）のクリップボードへ送る。tmux 内・SSH 先でも動く
+  function! s:osc52_yank() abort
+    if v:event.operator !=# 'y' || v:event.regname !=# ''
+      return
+    endif
+    let l:text = join(v:event.regcontents, "\n") . (v:event.regtype ==# 'V' ? "\n" : '')
+    call echoraw("\e]52;c;" . system('base64 -w0', l:text) . "\x07")
+  endfunction
+  augroup osc52_yank
+    autocmd!
+    autocmd TextYankPost * call s:osc52_yank()
+  augroup END
+endif
 
 
 " 表示設定
@@ -54,8 +79,6 @@ syntax enable
 
 
 " TAB設定
-" 不可視文字を可視化(タブが「▸-」と表示される)
-" set list listchars=tab:\▸\-
 " Tab文字を半角スペースにする
 set expandtab
 " 行頭以外のTab文字の表示幅（スペースいくつ分）
@@ -76,4 +99,4 @@ set wrapscan
 " 検索語をハイライト表示
 set hlsearch
 " ESC連打でハイライト解除
-nmap <Esc><Esc> :nohlsearch<CR><Esc>
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR>

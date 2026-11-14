@@ -1,25 +1,30 @@
-DOTPATH    := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
-CANDIDATES := $(wildcard .??*)
-EXCLUSIONS := .DS_Store .git .gitmodules .travis.yml .gitignore
-DOTFILES   := $(filter-out $(EXCLUSIONS), $(CANDIDATES))
+# install.sh のラッパー
+INSTALL := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))/install.sh
 
 .DEFAULT_GOAL := help
+.PHONY: help install update deploy clean list vscode vscode-pull
 
-all:
+install: ## Set up everything except VS Code (packages, links, mise tools, zsh plugins)
+	@$(INSTALL) install
 
-list: ## Show dot files in this repo
-	@$(foreach val, $(DOTFILES), /bin/ls -dF $(val);)
+update: ## Update repo, mise, CLI tools and zsh plugins
+	@$(INSTALL) update
 
-deploy: ## Create symlink to home directory
-	@echo 'Deploy dotfiles to home directory.'
-	@echo ''
-	@$(foreach val, $(DOTFILES), ln -sfnv $(abspath $(val)) $(HOME)/$(val);)
+deploy: ## Create symlinks (existing real files are backed up as *.bak.<timestamp>)
+	@$(INSTALL) link
 
-clean: ## Remove the dot files and this repo
-	@echo 'Remove dot files in your home directory...'
-	@-$(foreach val, $(DOTFILES), rm -vrf $(HOME)/$(val);)
+clean: ## Remove only the symlinks that point into this repo
+	@$(INSTALL) unlink
 
-help: ## Self-documented Makefile
+list: ## Show files managed by this repo
+	@$(INSTALL) list
+
+vscode: ## Deploy VS Code settings/snippets/extensions (existing files are backed up)
+	@$(INSTALL) vscode
+
+vscode-pull: ## Import current VS Code settings and extension list into this repo (except machine-local keys)
+	@$(INSTALL) vscode-pull
+
+help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
-		| sort \
-		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'

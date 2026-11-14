@@ -1,0 +1,152 @@
+# ~/.zshrc
+#   プラグイン管理 : antidote (~/.config/zsh/plugins.txt)
+#   ツール管理     : mise     (~/.config/mise/config.toml、端末だけのツールは config.local.toml)
+#   プロンプト     : starship (~/.config/starship.toml)
+#   プロキシ       : ~/.config/zsh/proxy.zsh（設定は端末ごとの ~/.config/proxy）
+# 上から順に読み込む。順番に意味があるので、セクションを入れ替えるときは注意
+
+############################################################ 基本
+typeset -U path fpath
+path=($HOME/.local/bin(N-/) $path)
+# /proc/version は Docker Desktop のコンテナ内でも "microsoft" を含むので、WSL にしかないものを見る
+[[ -d /run/WSL || -e /proc/sys/fs/binfmt_misc/WSLInterop ]] && IS_WSL=1
+
+ZSH_CACHE=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
+ZSH_COMPDIR=$ZSH_CACHE/completions
+[[ -d $ZSH_COMPDIR ]] || mkdir -p $ZSH_COMPDIR
+fpath=($ZSH_COMPDIR $fpath)
+
+# コマンド出力をファイルにキャッシュする。コマンドの実体パスが変わるか更新されたときだけ再実行する
+# （生成に失敗した場合も、コマンドが変わるまで再実行しない）
+#   usage: _zcache <出力ファイル> <コマンド> [引数...]
+# 注意: 実行時の環境（PATH 等）を埋め込む出力（mise activate など）には使わないこと
+function _zcache() {
+  local out=$1 bin=${commands[$2]:A} prev
+  shift
+  [[ -n $bin ]] || return 1
+  [[ -r $out.src ]] && prev=$(<$out.src)
+  if [[ $prev != $bin || $bin -nt $out.src ]]; then
+    print -r -- $bin >| $out.src
+    "$@" >| $out 2>/dev/null || rm -f $out
+    # 補完関数が更新されたら compinit のダンプを作り直させる
+    [[ $out == $ZSH_COMPDIR/* ]] && rm -f ${XDG_CACHE_HOME:-$HOME/.cache}/prezto/zcompdump(N)
+  fi
+  [[ -s $out ]]
+}
+
+############################################################ WSL: Windows 側のパス
+# /etc/wsl.conf で appendWindowsPath=false にしている前提で、必要なものだけ追加する
+if [[ -n $IS_WSL ]]; then
+  path+=(
+    /mnt/c/WINDOWS
+    /mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0
+    "/mnt/c/Program Files/Docker/Docker/resources/bin"
+    /mnt/c/ProgramData/DockerDesktop/version-bin
+  )
+  # Windows のユーザー名（cmd.exe は遅いので、初回だけ問い合わせて ~/.cache/zsh/win_user に保存する）
+  if [[ -z $WIN_USER ]]; then
+    if [[ -s $ZSH_CACHE/win_user ]]; then
+      WIN_USER=$(<$ZSH_CACHE/win_user)
+    elif [[ -x /mnt/c/Windows/System32/cmd.exe ]]; then
+      WIN_USER=$(cd /mnt/c && /mnt/c/Windows/System32/cmd.exe /d /c 'echo %USERNAME%' 2>/dev/null)
+      WIN_USER=${WIN_USER%$'\r'}
+      [[ -n $WIN_USER ]] && print -r -- $WIN_USER >| $ZSH_CACHE/win_user
+    fi
+  fi
+  if [[ -n $WIN_USER ]]; then
+    export WIN_USER
+    path+=("/mnt/c/Users/$WIN_USER/AppData/Local/Programs/Microsoft VS Code/bin")
+  fi
+fi
+
+############################################################ プロキシ
+# antidote の git clone などの通信より前に設定する
+[[ -r ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/proxy.zsh ]] && source ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/proxy.zsh
+
+############################################################ mise（ツールのバージョン管理）
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh)"
+  _zcache $ZSH_COMPDIR/_mise mise completion zsh
+fi
+(( $+commands[uv] ))     && _zcache $ZSH_COMPDIR/_uv uv generate-shell-completion zsh
+(( $+commands[docker] )) && _zcache $ZSH_COMPDIR/_docker docker completion zsh
+
+############################################################ antidote（プラグイン管理）・prezto
+ANTIDOTE_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/antidote
+if [[ ! -r $ANTIDOTE_DIR/antidote.zsh ]]; then
+  print -P "%F{33}antidote をインストールしています...%f"
+  git clone --depth=1 https://github.com/mattmc3/antidote $ANTIDOTE_DIR
+fi
+
+# prezto: 読み込むモジュールと設定（antidote が prezto の init.zsh を読み込む）
+zstyle ':prezto:load' pmodule \
+  utility history directory command-not-found editor terminal completion
+zstyle ':prezto:*:*' color 'yes'
+zstyle ':prezto:module:terminal' auto-title 'yes'
+zstyle ':prezto:module:terminal:window-title' format '%m: %s'
+zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
+zstyle ':prezto:module:terminal:multiplexer-title' format '%s'
+
+source $ANTIDOTE_DIR/antidote.zsh
+antidote load ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/plugins.txt $ZSH_CACHE/zsh_plugins.zsh
+
+############################################################ 補完・キーバインド（compinit の後）
+(( $+functions[_proxy_complete] )) && compdef _proxy_complete proxy
+
+# fzf（キーバインドは prezto の editor モジュールより後に設定する）
+_zcache $ZSH_CACHE/fzf.zsh fzf --zsh && source $ZSH_CACHE/fzf.zsh
+
+# aws（bash 形式の補完）
+if (( $+commands[aws_completer] )); then
+  autoload -Uz bashcompinit && bashcompinit
+  complete -C ${commands[aws_completer]} aws
+fi
+
+############################################################ 環境（prezto の設定を上書きするので後に置く）
+# 言語（コンソールでは日本語を表示できないので C。日本語ロケールが無い環境でも C）
+if [[ $TERM == linux ]] || ! locale -a 2>/dev/null | grep -qi '^ja_JP\.utf-\{0,1\}8$'; then
+  export LANG=C.UTF-8
+else
+  export LANG=ja_JP.UTF-8
+fi
+
+# エディタ（VS Code があれば使う。--wait で閉じるまで待つので git commit などでも使える）
+if (( $+commands[code] )); then
+  export EDITOR='code --wait'
+else
+  export EDITOR=vim
+fi
+
+# time の出力形式（zsh 組み込みの time を使うのでパイプラインや関数も計測できる）
+TIMEFMT=$'CPU:%P Memory:%MKB Time:%E'
+
+# 他ユーザー書き込み可ディレクトリ（WSL の /mnt/c 配下など）の色を見やすくする
+export LS_COLORS="${LS_COLORS}:ow=01;34"
+
+############################################################ ssh-agent（mise の後: wsl2-ssh-agent は mise で入る）
+#   WSL     : Windows 側の ssh-agent を wsl2-ssh-agent 経由で使う
+#   それ以外: agent がなければ ~/.ssh/agent.sock で起動し、以降のシェルで使い回す
+# どちらも ~/.ssh にソケットを作るので、無ければ作成する（新しい環境では存在しないことがある）
+[[ -d ~/.ssh ]] || mkdir -m 700 ~/.ssh
+if [[ -n $IS_WSL ]]; then
+  (( $+commands[wsl2-ssh-agent] )) && eval "$(wsl2-ssh-agent)"
+elif [[ -z $SSH_AUTH_SOCK && -z $SSH_CONNECTION ]] && (( $+commands[ssh-agent] )); then
+  export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
+  ssh-add -l &>/dev/null
+  case $? in
+    2)  # agent に接続できない: 起動する
+      rm -f $SSH_AUTH_SOCK
+      eval "$(ssh-agent -a $SSH_AUTH_SOCK)" >/dev/null
+      ;&  # 続けて鍵を登録する
+    1)  # agent に鍵が無い（agent の起動後に鍵を置いた場合も含む）: 既定の鍵があれば登録する
+      # 配列のまま絞り込んでから数える（(( )) の中で絞り込むと文字列に連結されて誤判定する）
+      _ssh_keys=(~/.ssh/id_*(N.))
+      _ssh_keys=(${_ssh_keys:#*.pub})
+      (( $#_ssh_keys )) && ssh-add -q 2>/dev/null
+      unset _ssh_keys
+      ;;
+  esac
+fi
+
+############################################################ starship（プロンプト）
+_zcache $ZSH_CACHE/starship.zsh starship init zsh --print-full-init && source $ZSH_CACHE/starship.zsh
