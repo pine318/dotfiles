@@ -1,6 +1,5 @@
 [tools]
 fzf = "latest"
-"github:mame/wsl2-ssh-agent" = "latest"
 starship = "latest"
 usage = "latest"
 uv = "latest"

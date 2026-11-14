@@ -1,11 +1,12 @@
 # dotfiles
 
-WSL2（Ubuntu）向けの zsh 環境。Linux（Ubuntu / Rocky Linux などの RHEL 系）でも動作する。
+WSL2（Ubuntu）向けの zsh 環境。Linux（Ubuntu / Debian・Raspberry Pi OS / Rocky Linux などの RHEL 系）でも動作する。
 
 | 動作確認済み | 備考 |
 | --- | --- |
 | WSL2 Ubuntu 24.04 | メイン環境 |
 | Ubuntu 24.04 / 22.04 | Docker コンテナで確認 |
+| Debian 12 / 13 | Docker コンテナで確認（Raspberry Pi OS も Debian ベース）。language-pack-ja が無いため、ロケールは locales で生成する |
 | Rocky Linux 9 / 10 | Docker コンテナで確認。日本語 man は提供されていないため入らない |
 
 ## インストール
@@ -20,7 +21,7 @@ curl -fsSL https://raw.githubusercontent.com/pine318/dotfiles/master/install.sh 
 2. 日本語環境（ロケール・タイムゾーン・日本語 man）の設定（`--no-ja` で省略）
 3. このリポジトリを `~/dotfiles` に clone
 4. シンボリックリンクの作成（既存の実ファイルは `*.bak.<日時>` に退避）
-5. mise と CLI ツール（fzf, uv, starship, wsl2-ssh-agent など）のインストール
+5. mise と CLI ツール（fzf, uv, starship など。WSL では wsl2-ssh-agent も）のインストール
 6. antidote と zsh プラグインのインストール
 7. ログインシェルを zsh に変更
 
@@ -152,6 +153,7 @@ dotfiles/
     ├── vim/vimrc                                 → ~/.vimrc
     ├── starship.toml     プロンプト              → ~/.config/starship.toml
     ├── mise/config.toml  CLI ツールのバージョン    → ~/.config/mise/config.toml
+    ├── mise/wsl.toml     WSL だけで使うツール      → ~/.config/mise/conf.d/wsl.toml（WSL のみ）
     └── vscode/           VS Code の設定・スニペット・拡張機能一覧
 ```
 

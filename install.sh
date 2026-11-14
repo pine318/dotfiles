@@ -37,7 +37,9 @@ USER=${USER:-$(id -un)}
 
 # パッケージ（apt: Ubuntu / dnf: Rocky Linux などの RHEL 系）
 APT_PACKAGES=(zsh git curl ca-certificates make tmux vim tar gzip xz-utils unzip openssh-client)
-APT_PACKAGES_JA=(language-pack-ja manpages-ja manpages-ja-dev tzdata)
+# language-pack-ja は Ubuntu のみ（Debian / Raspberry Pi OS には無いので、locales でロケールを生成する）
+APT_PACKAGES_JA=(locales language-pack-ja manpages-ja manpages-ja-dev tzdata)
+APT_PACKAGES_JA_OPTIONAL=(language-pack-ja) # 無くてもよい（無ければ警告せずにスキップする）
 DNF_PACKAGES=(zsh git curl ca-certificates make tmux vim-enhanced tar gzip xz unzip openssh-clients)
 DNF_PACKAGES_JA=(glibc-langpack-ja tzdata) # 日本語 man は RHEL 系では提供されていない
 
@@ -52,6 +54,10 @@ link_pairs() {
     "$d/config/vim/vimrc" "$HOME/.vimrc" \
     "$d/config/starship.toml" "$CONFIG_HOME/starship.toml" \
     "$d/config/mise/config.toml" "$CONFIG_HOME/mise/config.toml"
+  # WSL でだけ使うツール（mise は conf.d/*.toml も読み込む）
+  if is_wsl; then
+    printf '%s\t%s\n' "$d/config/mise/wsl.toml" "$CONFIG_HOME/mise/conf.d/wsl.toml"
+  fi
 }
 
 # ---------------------------------------------------------------- ユーティリティ
@@ -113,6 +119,50 @@ pkg_install() {
   esac
 }
 
+# apt でインストールできるパッケージか（apt-get update の後に使う）
+#   grep -q をパイプでつなぐと、grep が先に終わったときに apt-cache が SIGPIPE で失敗し、pipefail で偽になるので変数で受ける
+apt_available() {
+  local policy
+  policy=$(LC_ALL=C apt-cache policy "$1" 2>/dev/null)
+  [[ $policy =~ Candidate:\ [^\(] ]]
+}
+
+# 足りないパッケージのうち、ディストリビューションに存在するものだけ入れる（apt のみ）
+#   存在しないもの（Debian での language-pack-ja など）はスキップする。APT_PACKAGES_JA_OPTIONAL 以外は警告を出す
+apt_install_available() {
+  local missing avail=() p
+  mapfile -t missing < <(missing_packages "$@")
+  ((${#missing[@]} > 0)) || return 0
+  has sudo || die "sudo がありません。root で ${missing[*]} をインストールしてから再実行してください"
+  sudo_pm apt-get update
+  for p in "${missing[@]}"; do
+    if apt_available "$p"; then
+      avail+=("$p")
+    elif [[ " ${APT_PACKAGES_JA_OPTIONAL[*]} " != *" $p "* ]]; then
+      warn "パッケージが見つからないためスキップします: $p"
+    fi
+  done
+  ((${#avail[@]} > 0)) || return 0
+  sudo_pm env DEBIAN_FRONTEND=noninteractive apt-get install -y "${avail[@]}"
+}
+
+has_ja_locale() {
+  local l
+  l=$(locale -a 2>/dev/null)
+  grep -qiE '^ja_JP\.utf-?8$' <<<"$l"
+}
+
+# ja_JP.UTF-8 ロケールを生成する（Ubuntu は language-pack-ja が生成するので、主に Debian 向け）
+generate_ja_locale() {
+  has_ja_locale && return 0
+  if [[ -f /etc/locale.gen ]]; then
+    sudo sed -i -E 's/^#[[:space:]]*(ja_JP\.UTF-8 UTF-8)/\1/' /etc/locale.gen
+    grep -qE '^ja_JP\.UTF-8 UTF-8' /etc/locale.gen || echo 'ja_JP.UTF-8 UTF-8' | sudo tee -a /etc/locale.gen >/dev/null
+  fi
+  sudo locale-gen ja_JP.UTF-8 >/dev/null
+  has_ja_locale
+}
+
 pkg_upgrade() {
   case $PM in
     apt)
@@ -169,11 +219,18 @@ install_packages() {
 setup_japanese() {
   [[ $OPT_JA == 1 ]] || return 0
   info "日本語環境"
+  local done=()
   case $PM in
     apt)
-      pkg_install "${APT_PACKAGES_JA[@]}"
-      if ! grep -qsiE '^LANG="?ja_JP\.UTF-?8' /etc/default/locale; then
-        sudo update-locale LANG=ja_JP.UTF-8
+      apt_install_available "${APT_PACKAGES_JA[@]}"
+      # ロケールが無いまま update-locale すると失敗するので、生成できたときだけ既定にする
+      if ! generate_ja_locale; then
+        warn "ja_JP.UTF-8 ロケールを生成できなかったため、既定のロケールは変更しません"
+      else
+        if ! grep -qsiE '^LANG="?ja_JP\.UTF-?8' /etc/default/locale; then
+          sudo update-locale LANG=ja_JP.UTF-8
+        fi
+        done+=("ロケール ja_JP.UTF-8")
       fi
       ;;
     dnf)
@@ -181,19 +238,27 @@ setup_japanese() {
       if ! grep -qsiE '^LANG="?ja_JP\.UTF-?8' /etc/locale.conf; then
         echo 'LANG=ja_JP.UTF-8' | sudo tee /etc/locale.conf >/dev/null
       fi
+      done+=("ロケール ja_JP.UTF-8")
       ;;
     *)
       warn "apt / dnf が無い環境のためスキップします"
       return 0
       ;;
   esac
-  if [[ $(readlink -f /etc/localtime) != /usr/share/zoneinfo/Asia/Tokyo ]]; then
-    sudo ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
-    if [[ $PM == apt ]]; then
-      sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure tzdata </dev/null
+  if [[ ! -e /usr/share/zoneinfo/Asia/Tokyo ]]; then
+    warn "タイムゾーンのデータ（tzdata）が無いため、タイムゾーンは変更しません"
+  else
+    if [[ $(readlink -f /etc/localtime) != /usr/share/zoneinfo/Asia/Tokyo ]]; then
+      sudo ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+      if [[ $PM == apt ]]; then
+        sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure tzdata </dev/null
+      fi
     fi
+    done+=("タイムゾーン Asia/Tokyo")
   fi
-  ok "ロケール ja_JP.UTF-8 / タイムゾーン Asia/Tokyo$([[ $PM == apt ]] && echo ' / 日本語 man')"
+  [[ $PM == apt && -z $(missing_packages manpages-ja) ]] && done+=("日本語 man")
+  ((${#done[@]} > 0)) && ok "$(printf '%s / ' "${done[@]}" | sed 's| / $||')"
+  return 0
 }
 
 # 3. リポジトリ
