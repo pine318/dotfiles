@@ -165,7 +165,8 @@ dotfiles/
 
 ```toml
 [tools]
-yt-dlp = "latest"
+jq = "latest"
+ripgrep = "latest"
 ```
 
 `.zshrc` と `.vimrc` だけはホーム直下に置く（zsh は `~/.zshenv` で `ZDOTDIR` を指定しないと `~/.config` を読まず、
